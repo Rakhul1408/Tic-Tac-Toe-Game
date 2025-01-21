@@ -1,0 +1,54 @@
+def tic_tac_toe():
+    def print_board(board):
+        for row in board:
+            print(" | ".join(row))
+            print("-" * 5)
+
+    def check_winner(board, player):
+        for row in board:
+            if all(s == player for s in row):
+                return True
+        for col in range(3):
+            if all(row[col] == player for row in board):
+                return True
+        if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
+            return True
+        return False
+
+    def is_full(board):
+        return all(cell != " " for row in board for cell in row)
+
+    print("Welcome to Tic Tac Toe!")
+    while True:
+        board = [[" " for _ in range(3)] for _ in range(3)]
+        current_player = "X"
+
+        while True:
+            print_board(board)
+            try:
+                row, col = map(int, input(f"{current_player}'s turn. Enter row and column (0, 1, or 2) separated by space: ").split())
+                if board[row][col] != " ":
+                    print("Cell already taken. Try again.")
+                    continue
+                board[row][col] = current_player
+
+                if check_winner(board, current_player):
+                    print_board(board)
+                    print(f"{current_player} wins!")
+                    break
+                if is_full(board):
+                    print_board(board)
+                    print("It's a draw!")
+                    break
+
+                current_player = "O" if current_player == "X" else "X"
+            except (ValueError, IndexError):
+                print("Invalid input. Please enter row and column as two numbers between 0 and 2.")
+
+        play_again = input("Do you want to play again? (yes/no): ").lower()
+        if play_again != "yes":
+            print("Thanks for playing!")
+            break
+
+if _name_ == "_main_":
+    tic_tac_toe()
